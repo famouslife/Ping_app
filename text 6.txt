@@ -1,0 +1,7 @@
+class FakeUser {
+  final String name;
+  final String imageUrl;
+  final int distanceMeters;
+
+  FakeUser({required this.name, required this.imageUrl, required this.distanceMeters});
+}

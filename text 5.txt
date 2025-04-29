@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:ping_app/models/fake_user.dart';
+import 'dart:async';
+import 'dart:math';
+
+class ChatScreen extends StatefulWidget {
+  final FakeUser user;
+
+  const ChatScreen({super.key, required this.user});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  final List<String> messages = [];
+  final TextEditingController controller = TextEditingController();
+  final Random random = Random();
+
+  void sendMessage(String text) {
+    setState(() {
+      messages.add('me:$text');
+    });
+    controller.clear();
+
+    Timer(Duration(seconds: random.nextInt(2) + 1), () {
+      setState(() {
+        messages.add('bot:${generateBotReply()}');
+      });
+    });
+  }
+
+  String generateBotReply() {
+    final replies = [
+      "Haha true!",
+      "That's interesting!",
+      "Tell me more!",
+      "Lol, you're funny!",
+      "Cool!",
+    ];
+    return replies[random.nextInt(replies.length)];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.user.name)),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final parts = messages[index].split(':');
+                final isMe = parts[0] == 'me';
+                return Align(
+                  alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isMe ? Colors.blueAccent : Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Text(parts[1], style: TextStyle(color: isMe ? Colors.white : Colors.black)),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(controller: controller),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                    if (controller.text.isNotEmpty) sendMessage(controller.text);
+                  },
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

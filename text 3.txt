@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:ping_app/screens/home_screen.dart';
+
+void main() {
+  runApp(const PingApp());
+}
+
+class PingApp extends StatelessWidget {
+  const PingApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'PING',
+      theme: ThemeData(
+        brightness: Brightness.light,
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system,
+      home: const HomeScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
